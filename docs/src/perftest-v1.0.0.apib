@@ -1,0 +1,152 @@
+FORMAT: 1A
+HOST: https://perftest
+
+# Performance Testing Persistance API
+
+This is a REST API for testing persistent storage and storting data externally.
+
+- **Version:** 1.0.0
+
+- **Author:** Jessica Smith <<jessica.smith@fasthosts.com>>
+
+## Pagination
+
+List resources can normally be paginated. You can control the pagination using query string parameters:
+
+ - **page** - The page of results to fetch
+ - **per_page** - The number of results per page
+
+ The metadata in the response will contain links to the other pages.
+
+# Group Miscellaneous Methods
+
+## Ping [/ping]
+
+### Ping [GET]
+
+Returns a simple response back to the client with minimal processing. Can be used to check the overall health
+of the API, check latency/response time and to confirm the version of the API you're using.
+
++ Response 200 (application/json)
+	+ Attributes (Ping Response)
+
+# Group Data
+
+## Data [/data{?page,per_page,key}]
+
+### List Data [GET]
+
+Retrieves a paginated list of all resource pools for the account.
+
++ Parameters
+	+ page: 1 (number, optional) - The results page
+		+ Default: 1
+	+ per_page: 20 (number, optional) - The number of results per page
+		+ Default: 10
+	+ key: foobar (string, optional) - The key to search for
+
++ Response 200 (application/json)
+	+ Attributes (Data List)
+
+### Create Data [POST]
+
+Creates a new data item.
+
+**Body Parameters**
+
+| Name        | Required | Description                                   | Example          |
+|-------------|----------|-----------------------------------------------|------------------|
+| key         | Yes      | A unique key for the data.                    | `My Data Key`    |
+| content     | No       | The content of the data.                      | `Foobar 123`     |
+| expires_at  | No       | If required, when the data expires. Defaults to +48 hours. | `2017-10-10 17:00:00` |
+| external    | No       | If true, the service will try and store data externally via the router. | `true`          |
+| size        | No       | If externally storing data, the size of data to store in MB. Either 1, 5, 10 or 20. | `1`             |
+| concurrency | No       | If externally storing data, the number of data items to store. Defaults to 1. | `5`             |
+
++ Attributes (Update Data)
++ Request Create Data (application/json)
++ Response 201 (application/json)
+	+ Attributes (Data)
+
+## Data [/data/{id}]
+
++ Parameters
+	+ id: 1234 (number) - The ID of the data
+
+### Get Data [GET]
+
+Returns a single data item.
+
++ Response 200 (application/json)
+	+ Attributes (Data)
+
+### Update Data [PUT]
+
+This accepts partial updates of the properties of the data.
+
+**Body Parameters**
+
+| Name        | Required | Description                                   | Example          |
+|-------------|----------|-----------------------------------------------|------------------|
+| key         | Yes      | A unique key for the data.                    | `My Data Key`    |
+| content     | No       | The content of the data.                      | `Foobar 123`     |
+| expires_at  | No       | If required, when the data expires. Defaults to +48 hours. | `2017-10-10 17:00:00` |
+
++ Request Update Data (application/json)
+	+ Attributes (Update Data)
++ Response 202 (application/json)
+	+ Attributes (Data)
+
+### Delete Data [DELETE]
+
+Removes the data.
+
++ Response 202 (application/json)
+	+ Attributes (Data)
+
+# Data Structures
+
+## Pagination
++ total: 1 (number) - The total number of objects in this list
++ count: 1 (number) - The number of objects on this page
++ per_page: 20 (number) - The number of objects per page
++ current_page: 1 (number) - The current page number
++ total_pages: 1 (number) - The total number of pages
++ links (object) - Links to other pages
+
+## Ping Response
++ timestamp: `2016-08-08T14:13:09+0000` (string) - The current timestamp according to the API server
++ version: 2 (string) - The version of the API you're using
++ build_date: `2016-08-08T14:13:09+0000` (string) - The timestamp of when this version of the API was built
+
+## Data
+ + data (Data Item)
+
+## Data Item
++ id: 1234 (number) - An ID representing the data
++ key: `My Data` (string) - A unique key for the data
++ content: `Something meaningful here` (string) - The content of the data
++ external: `{  "duration": 1234 }` (string) - On creation, the response of the external service for the data stored.
++ expires_at: `2017-06-27T12:58:00+0000` (string) - The timestamp when the object will expire and will be removed
++ created_at: `2017-06-27T12:58:00+0000` (string) - The timestamp when the object was created
++ updated_at: `2017-06-27T12:58:00+0000` (string) - The timestamp when the object was last updated
++ selfURI: `http://perftest/data/1234` (string) - The URL for this object
+
+## Data List
++ data (array)
+	+ (Data Item)
++ meta (object)
+	+ pagination (Pagination)
+
+## Create Data
++ key: `My Data` (string) - A unique key for the data
++ content: `Something meaningful here` (string) - The content of the data
++ expires_at: `2017-06-27T12:58:00+0000` (string) - The timestamp when the object will expire and will be removed
++ external: true (boolean, optional) - Whether to store some data externally using the data router
++ size: 1 (number, optional) - If storing externally, the amount of data to store in MB. Either 1, 5, 10 or 20.
++ concurrency: 1 (number, optional) - If storing externally, the number of concurrent store operations to perform.
+
+## Update Data
++ key: `My Data` (string) - A unique key for the data
++ content: `Something meaningful here` (string) - The content of the data
++ expires_at: `2017-06-27T12:58:00+0000` (string) - The timestamp when the object will expire and will be removed

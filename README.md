@@ -25,6 +25,11 @@ available as well as some custom ones. The most interesting will be:
  - `DB_PASSWORD` - Password for the database
  - `PERFTEST_ROUTER` - A URL for the data router, eg. `http://router:8080/send/`
 
+## Usage
+
+There is a basic REST API that returns JSON. The endpoint is at `/data`. Visiting the root of the service
+will present the API docs.
+
 ## Author
 
 Jessica Smith - <jessica.smith@fasthosts.com>

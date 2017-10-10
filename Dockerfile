@@ -23,7 +23,6 @@ COPY src ./
 # Run composer scripts and any other setup.
 RUN \
 	composer dump-autoload --optimize && \
-	composer run-script post-install-cmd && \
 	php artisan optimize && \
 	php artisan key:generate && \
 	application-set-file-permissions
