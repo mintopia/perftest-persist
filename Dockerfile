@@ -25,4 +25,5 @@ RUN \
 	composer dump-autoload --optimize && \
 	php artisan optimize && \
 	php artisan key:generate && \
+	application-component-remove worker && \
 	application-set-file-permissions
