@@ -25,5 +25,8 @@ RUN \
 	composer dump-autoload --optimize && \
 	php artisan optimize && \
 	php artisan key:generate && \
-	application-component-remove worker && \
+	application-component-disable all && \
+	application-component-enable migrator && \
+	application-component-enable web && \
+	application-component-enable scheduler && \
 	application-set-file-permissions
