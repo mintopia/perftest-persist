@@ -30,6 +30,10 @@ available as well as some custom ones. The most interesting will be:
 There is a basic REST API that returns JSON. The endpoint is at `/data`. Visiting the root of the service
 will present the API docs.
 
+There is an artisan scheduled task `data:expire` that will remove expired data from the database. It is reccomended
+this is run to reduce the amount of space this takes up over time. The default docker image will run the scheduler
+as well as the web interface.
+
 ## Author
 
 Jessica Smith - <jessica.smith@fasthosts.com>
